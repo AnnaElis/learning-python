@@ -1,0 +1,18 @@
+#SEO-парсер (на базе BeautifulSoup)
+#Волшебный код: узнаём заголовок любого сайта
+import requests
+from bs4 import BeautifulSoup
+
+# Сайт для примера (можешь заменить на свой)
+url = "https://vitoslavica.ru"
+
+response = requests.get(url)
+soup = BeautifulSoup(response.text, 'html.parser')
+title = soup.find('h2').text  # Ищем заголовок <h1>
+print("Заголовок страницы:", title)
+print("Статус ответа:", response.status_code)  # 200 = сайт доступен
+links = [a['href'] for a in soup.find_all('a', href=True)]
+print("Первые 5 ссылок:", links[:5])
+with open('title.txt', 'w') as f:
+    f.write(title)
+print("Заголовок сохранён в title.txt!")
