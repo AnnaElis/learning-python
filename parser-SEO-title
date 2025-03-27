@@ -16,3 +16,7 @@ print("Первые 5 ссылок:", links[:5])
 with open('title.txt', 'w') as f:
     f.write(title)
 print("Заголовок сохранён в title.txt!")
+if response.status_code == 200:  
+    print("Сайт доступен!")  
+else:  
+    print("Ошибка!")  
