@@ -46,7 +46,7 @@ def main():
         site_url = 'https://' + site_url  # Добавляем схему по умолчанию
 
     print(f"\n🔍 Начинаю проверку: {site_url}")
-    broken_links = check_broken_links(site_url, max_pages=20)  # Уменьшено для теста
+    broken_links = check_broken_links(site_url, max_pages=2000)  # Уменьшено для теста
 
     # Генерируем имя файла на основе домена
     domain = urlparse(site_url).netloc.replace('.', '_')
