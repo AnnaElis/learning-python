@@ -1,0 +1,46 @@
+import requests
+from bs4 import BeautifulSoup
+import pandas as pd
+import time  # Добавляем задержку
+
+def check_broken_links(start_url, max_pages=50):
+    domain = "vitoslavica.ru"  # Ваш домен без https://
+    visited = set()
+    broken_links = []
+
+    # Игнорируем эти пути (опционально)
+    ignore_paths = ["/wp-admin/", "/feed/"]
+    
+    # Главная страница
+    to_visit = {start_url}
+
+    while to_visit and len(visited) < max_pages:
+        url = to_visit.pop()
+        if url in visited:
+            continue
+
+        try:
+            response = requests.get(url, timeout=10)
+            visited.add(url)
+            print(f"Проверено: {url}")
+
+            if response.status_code == 404:
+                broken_links.append(url)
+            else:
+                soup = BeautifulSoup(response.text, 'html.parser')
+                for link in soup.find_all('a', href=True):
+                    href = link['href']
+                    if href.startswith('/') and not any(href.startswith(path) for path in ignore_paths):
+                        full_url = f"https://{domain}{href}"
+                        to_visit.add(full_url)
+            
+            time.sleep(1)  # Пауза для защиты сервера
+
+        except Exception as e:
+            print(f"Ошибка: {url} — {e}")
+
+    return broken_links
+
+# Запуск
+broken = check_broken_links("https://vitoslavica.ru")
+pd.DataFrame(broken, columns=["404 Errors"]).to_csv("vitoslavica_404.csv", index=False)
