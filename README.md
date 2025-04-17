@@ -59,7 +59,7 @@ Python-скрипт для комплексного анализа SEO-пара�
 - Простой запуск через командную строку
 
 ### Как использовать:
-```bash
+bash
 python image_downloader.py "https://example.com" [--folder "custom_folder"]
 
 🚀 Скрипт 2: largest_image_downloader.py
